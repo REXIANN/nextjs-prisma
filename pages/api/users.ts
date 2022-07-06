@@ -5,10 +5,8 @@ import client from "../../libs/server/client";
 import { GET, POST, DELETE } from "../../libs/server/constants";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log("method", req.method);
   switch (req.method) {
     case POST: {
-      console.log("body", req.body);
       const { name, email, phone: phoneNumberInString } = req.body;
       const phone = +phoneNumberInString;
 
@@ -20,6 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.send(updateUser);
       res.end();
+      client.$disconnect();
       break;
     }
     case DELETE: {
@@ -31,6 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.send(deleteUser);
       res.end();
+      client.$disconnect();
       break;
     }
     case GET:
@@ -39,6 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.send(users);
       res.end();
+      client.$disconnect();
     }
   }
 }
