@@ -1,40 +1,44 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Prisma } from "@prisma/client";
 
-import client from "@/libs/server/client";
+import client from "../../libs/server/client";
 
-import { GET, POST, DELETE } from "@/libs/server/constatns";
-
-async function getUser({ id }: { id: number }) {
-
-  const user = await client.user.findUnique({ where: { id } });
-}
+import { GET, POST, DELETE } from "../../libs/server/constants";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log("method", req.method);
   switch (req.method) {
     case POST: {
+      console.log("body", req.body);
+      const { name, email, phone: phoneNumberInString } = req.body;
+      const phone = +phoneNumberInString;
+
       const updateUser = await client.user.upsert({
-        where: {},
-        create: { name: req.body.name },
-        update: { name: req.body.name },
+        where: { email },
+        create: { name, email, phone },
+        update: { name, email, phone },
       });
 
-      return res.status(200).send(updateUser);
+      res.send(updateUser);
+      res.end();
+      break;
     }
     case DELETE: {
       const deleteUser = await client.user.delete({
         where: {
-          id: req.body.id,
+          email: req.body.email,
         },
       });
 
-      return res.status(200).send(deleteUser);
+      res.send(deleteUser);
+      res.end();
+      break;
     }
     case GET:
     default: {
       const users = await client.user.findMany();
 
-      return res.status(200).send(users);
+      res.send(users);
+      res.end();
     }
   }
 }
