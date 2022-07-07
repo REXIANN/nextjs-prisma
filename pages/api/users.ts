@@ -7,18 +7,18 @@ import { GET, POST, DELETE } from "../../libs/server/constants";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case POST: {
-      const { name, email, phone: phoneNumberInString } = req.body;
-      const phone = +phoneNumberInString;
+      const { name, email, phone: phoneNumberInString, age: ageInString } = req.body;
+      const phone = phoneNumberInString === "" ? null : Number(phoneNumberInString);
+      const age = Number(ageInString);
 
       const updateUser = await client.user.upsert({
         where: { email },
-        create: { name, email, phone },
-        update: { name, email, phone },
+        create: { name, email, phone, age },
+        update: { name, email, phone, age },
       });
 
       res.send(updateUser);
       res.end();
-      client.$disconnect();
       break;
     }
     case DELETE: {
@@ -30,7 +30,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.send(deleteUser);
       res.end();
-      client.$disconnect();
       break;
     }
     case GET:
@@ -39,7 +38,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.send(users);
       res.end();
-      client.$disconnect();
     }
   }
 }

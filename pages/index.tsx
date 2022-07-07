@@ -38,6 +38,7 @@ interface Props {
 }
 
 function Index(props: Props) {
+
   return (
     <div className={styles.container}>
       <nav className={navCss}>

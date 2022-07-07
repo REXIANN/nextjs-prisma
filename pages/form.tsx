@@ -30,6 +30,7 @@ interface EnterForm {
   name: string;
   email: string;
   phone?: number;
+  age: number;
 }
 
 function Form() {
@@ -60,6 +61,10 @@ function Form() {
         <div className={boxCss}>
           <label htmlFor={`${id}-email`}>이메일</label>
           <input id={`${id}-email`} {...register("email", { required: true })}/>
+        </div>
+        <div className={boxCss}>
+          <label htmlFor={`${id}-age`}>나이</label>
+          <input id={`${id}-age`} {...register("age", { required: true })}/>
         </div>
         <div className={boxCss}>
           <label htmlFor={`${id}-phone`}>전화번호(선택)</label>
