@@ -50,7 +50,7 @@ function Users(props: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }).then((res) => {
-      console.log(res, res.json())
+      console.log(res)
       props.fetchUsers()
     })
   };

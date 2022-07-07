@@ -9,5 +9,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  res.status(200).send({ name: "John Doe" });
+  res.status(200).send("여러분 안녕하세요? 😁 FE 세미나 입니다!! 🎉\n");
 }
