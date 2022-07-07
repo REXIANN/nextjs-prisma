@@ -11,19 +11,48 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  phone Int? @unique
-  posts Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int             @id @default(autoincrement())
+  name           String
+  age            Int
+  isAdmin        Role            @default(BASIC)
+  email          String          @unique
+  phone          Int?            @unique
+  posts          Post[]          @relation("posts")
+  favoritPosts   Post[]          @relation("favoritePosts")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  UserPreference UserPreference?
+
+  @@unique([age, name])
+  @@index([email])
 }
 
 model Post {
-  id Int @id @default(autoincrement())
-  title String
-  published Boolean @default(false)
-  author User @relation(fields: [authorId], references: [id])
-  authorId Int
+  id            Int        @id @default(autoincrement())
+  title         String
+  averageRating Float
+  published     Boolean    @default(false)
+  author        User       @relation("posts", fields: [authorId], references: [id])
+  authorId      Int
+  favoritedBy   User       @relation("favoritePosts", fields: [favoritedById], references: [id])
+  favoritedById Int
+  categories    Category[]
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
+}
+
+model UserPreference {
+  id           String  @id @default(uuid())
+  emailUpdates Boolean
+  user         User    @relation(fields: [userId], references: [id])
+  userId       Int     @unique
+}
+
+enum Role {
+  BASIC
+  ADMIN
 }
